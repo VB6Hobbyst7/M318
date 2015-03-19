@@ -54,7 +54,6 @@ Module modSort
         Dim i As Long
         For Each c As Char In strInput
             comp = c
-            MessageBox.Show(c)
             i = pos = 0
             For Each cc As Char In strInput
                 If uml(cc) < uml(comp) And uml(cc) >= uml(compOld) Then
@@ -64,7 +63,6 @@ Module modSort
                 i += 1
             Next
             Mid(strInput, pos, 1) = "ÿ"
-            MessageBox.Show(strInput)
             compOld = comp
             sb.Append(comp)
         Next
