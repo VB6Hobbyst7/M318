@@ -18,3 +18,13 @@ E:\school\sorting\sorting\bin\Debug\sorting.xml
 E:\school\sorting\sorting\obj\Debug\sorting.Form1.resources
 E:\school\sorting\sorting\obj\Debug\sorting.Resources.resources
 E:\school\sorting\sorting\obj\Debug\sorting.vbproj.GenerateResource.Cache
+C:\Users\vmadmin\Documents\GIT\sorting\sorting\bin\Debug\sorting.exe.config
+C:\Users\vmadmin\Documents\GIT\sorting\sorting\obj\Debug\sorting.exe
+C:\Users\vmadmin\Documents\GIT\sorting\sorting\obj\Debug\sorting.xml
+C:\Users\vmadmin\Documents\GIT\sorting\sorting\obj\Debug\sorting.pdb
+C:\Users\vmadmin\Documents\GIT\sorting\sorting\obj\Debug\sorting.Form1.resources
+C:\Users\vmadmin\Documents\GIT\sorting\sorting\obj\Debug\sorting.Resources.resources
+C:\Users\vmadmin\Documents\GIT\sorting\sorting\obj\Debug\sorting.vbproj.GenerateResource.Cache
+C:\Users\vmadmin\Documents\GIT\sorting\sorting\bin\Debug\sorting.exe
+C:\Users\vmadmin\Documents\GIT\sorting\sorting\bin\Debug\sorting.pdb
+C:\Users\vmadmin\Documents\GIT\sorting\sorting\bin\Debug\sorting.xml

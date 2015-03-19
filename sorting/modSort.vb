@@ -1,4 +1,9 @@
-﻿Module modSort
+﻿#Region "Imports"
+Imports System.Text
+Imports System.Globalization
+Imports System.Console
+#End Region
+Module modSort
 #Region "Bubblesort"
     '==Bubble Sort==
     Function sortBubble(strInput As String)
@@ -42,13 +47,28 @@
 #Region "Internsort"
     '==Intern Sort==
     Function sortIntern(strInput As String)
-        Dim strSorted As String = ""
+        Dim sb As New StringBuilder
+        Dim comp As Char
+        Dim compOld As Char = " "(0)
+        Dim pos As Long
+        Dim i As Long
         For Each c As Char In strInput
-            For Each x As Char In strSorted
-
+            comp = c
+            MessageBox.Show(c)
+            i = pos = 0
+            For Each cc As Char In strInput
+                If uml(cc) < uml(comp) And uml(cc) >= uml(compOld) Then
+                    comp = cc
+                    pos = i + 1
+                End If
+                i += 1
             Next
+            Mid(strInput, pos, 1) = "ÿ"
+            MessageBox.Show(strInput)
+            compOld = comp
+            sb.Append(comp)
         Next
-        Return strSorted
+        Return sb.ToString()
     End Function
 #End Region
 #Region "Quicksort"
