@@ -1,0 +1,20 @@
+\\filer25\users251\ue61674\visual studio 2013\Projects\sorting\sorting\bin\Debug\sorting.exe.config
+\\filer25\users251\ue61674\visual studio 2013\Projects\sorting\sorting\bin\Debug\sorting.exe
+\\filer25\users251\ue61674\visual studio 2013\Projects\sorting\sorting\bin\Debug\sorting.pdb
+\\filer25\users251\ue61674\visual studio 2013\Projects\sorting\sorting\bin\Debug\sorting.xml
+\\filer25\users251\ue61674\visual studio 2013\Projects\sorting\sorting\obj\Debug\sorting.Form1.resources
+\\filer25\users251\ue61674\visual studio 2013\Projects\sorting\sorting\obj\Debug\sorting.Resources.resources
+\\filer25\users251\ue61674\visual studio 2013\Projects\sorting\sorting\obj\Debug\sorting.vbproj.GenerateResource.Cache
+\\filer25\users251\ue61674\visual studio 2013\Projects\sorting\sorting\obj\Debug\sorting.exe
+\\filer25\users251\ue61674\visual studio 2013\Projects\sorting\sorting\obj\Debug\sorting.xml
+\\filer25\users251\ue61674\visual studio 2013\Projects\sorting\sorting\obj\Debug\sorting.pdb
+E:\school\sorting\sorting\bin\Debug\sorting.exe.config
+E:\school\sorting\sorting\obj\Debug\sorting.exe
+E:\school\sorting\sorting\obj\Debug\sorting.xml
+E:\school\sorting\sorting\obj\Debug\sorting.pdb
+E:\school\sorting\sorting\bin\Debug\sorting.exe
+E:\school\sorting\sorting\bin\Debug\sorting.pdb
+E:\school\sorting\sorting\bin\Debug\sorting.xml
+E:\school\sorting\sorting\obj\Debug\sorting.Form1.resources
+E:\school\sorting\sorting\obj\Debug\sorting.Resources.resources
+E:\school\sorting\sorting\obj\Debug\sorting.vbproj.GenerateResource.Cache
