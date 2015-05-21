@@ -22,6 +22,7 @@ Partial Class Form1
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
         Me.btnSort = New System.Windows.Forms.Button()
         Me.btnExit = New System.Windows.Forms.Button()
         Me.lstAlgo = New System.Windows.Forms.ListBox()
@@ -30,6 +31,7 @@ Partial Class Form1
         Me.rtfInput = New System.Windows.Forms.RichTextBox()
         Me.rtfOutput = New System.Windows.Forms.RichTextBox()
         Me.chkUmlaute = New System.Windows.Forms.CheckBox()
+        Me.chk_words = New System.Windows.Forms.CheckBox()
         Me.SuspendLayout()
         '
         'btnSort
@@ -104,11 +106,22 @@ Partial Class Form1
         Me.chkUmlaute.Text = "Umlaute"
         Me.chkUmlaute.UseVisualStyleBackColor = True
         '
+        'chk_words
+        '
+        Me.chk_words.AutoSize = True
+        Me.chk_words.Location = New System.Drawing.Point(858, 319)
+        Me.chk_words.Name = "chk_words"
+        Me.chk_words.Size = New System.Drawing.Size(58, 17)
+        Me.chk_words.TabIndex = 10
+        Me.chk_words.Text = "Wörter"
+        Me.chk_words.UseVisualStyleBackColor = True
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(979, 595)
+        Me.Controls.Add(Me.chk_words)
         Me.Controls.Add(Me.chkUmlaute)
         Me.Controls.Add(Me.rtfOutput)
         Me.Controls.Add(Me.rtfInput)
@@ -117,6 +130,7 @@ Partial Class Form1
         Me.Controls.Add(Me.lstAlgo)
         Me.Controls.Add(Me.btnExit)
         Me.Controls.Add(Me.btnSort)
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "Form1"
         Me.Text = "Form1"
         Me.ResumeLayout(False)
@@ -131,5 +145,6 @@ Partial Class Form1
     Friend WithEvents rtfInput As System.Windows.Forms.RichTextBox
     Friend WithEvents rtfOutput As System.Windows.Forms.RichTextBox
     Friend WithEvents chkUmlaute As System.Windows.Forms.CheckBox
+    Friend WithEvents chk_words As System.Windows.Forms.CheckBox
 
 End Class
