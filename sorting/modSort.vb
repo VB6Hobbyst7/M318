@@ -140,17 +140,17 @@ Module modSort
     '    Return A
     'End Function
 #End Region
-    '#Region "Insertionsort"
-    '    '==Insertion Sort==
-    '    Function sortInsertion(strInput As String)
-    '        For i As Long = 0 To strInput.Length - 1 Step 1
-    '            Dim j As Long = i
-    '            While j >= 2 And uml(strInput.Chars(j - 1)) > uml(strInput.Chars(j))
-    '                strInput = swap(strInput, j, j - 1)
-    '                j -= 1
-    '            End While
-    '        Next
-    '        Return strInput
-    '    End Function
-    '#End Region
+#Region "Insertionsort"
+    '==Insertion Sort==
+    Function sortInsertion(strInput As String())
+        For i As Long = 0 To strInput.Length - 1 Step 1
+            Dim j As Long = i
+            While j >= 2 And uml(strInput(j - 1)) > uml(strInput(j))
+                swap(strInput, j, j - 1)
+                j -= 1
+            End While
+        Next
+        Return strInput
+    End Function
+#End Region
 End Module

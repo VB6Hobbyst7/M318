@@ -94,13 +94,17 @@ Module modUtil
             Case 3
                 sortQuick(val, 0, val.Length - 1)
             Case 4
-                'sortInsertion()
+                sortInsertion(val)
             Case Else
                 MessageBox.Show("Bitte wählen Sie einen Sortieralgorithmus!", "Achtung!", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Select
 
         'output ins textfeld
-        strSort = String.Join(vbCrLf, val)
+        If words Then
+            strSort = String.Join(" ", val)
+        Else
+            strSort = String.Join("", val)
+        End If
         Form1.rtfOutput.Text = strSort
     End Sub
 #End Region
@@ -111,12 +115,16 @@ Module modUtil
         Dim sb As New StringBuilder
         'loop durch inputstring
         For i As Integer = 0 To strIn.Length - 1 Step 1
-            'sehe ob Char ein Sonderzeichen ist
-            If Char.IsPunctuation(strIn(i)) Then
-                'füge sonderzeichen zu Stringbuilder hinzu
-                sb.Append(strIn(i))
+            'sehe ob Char ein Zeilenabstand ist
+            If strIn(i) = vbCrLf Or strIn(i) = vbNewLine Or strIn(i) = Chr(10) Or strIn(i) = Chr(13) Then
+                
                 'Ersetze sonderzeichen durch " " in inputstring
                 Mid(strIn, i + 1, 1) = " "
+            ElseIf Char.IsPunctuation(strIn(i)) Then
+                'füge sonderzeichen zu Stringbuilder hinzu
+                sb.Append(strIn(i))
+                'Ersetze sonderzeichen durch "" in inputstring
+                Mid(strIn, i + 1, 1) = ""
             End If
         Next
         Return sb.ToString
