@@ -7,13 +7,12 @@ Imports System.Linq
 Module modUtil
 #Region "swap"
     'funktion zum austauschen zweier elemente in einem StringArray
-    Function swap(strIn As String(), pos1 As Integer, pos2 As Integer) As String()
+    Sub swap(ByRef strIn As String(), pos1 As Integer, pos2 As Integer)
         Dim temp As String
         temp = strIn(pos1)
         strIn(pos1) = strIn(pos2)
         strIn(pos2) = temp
-        Return strIn
-    End Function
+    End Sub
 #End Region
 #Region "Umlaute"
     'falls ein non-ascii char vorhanden ist, werden die zeichen entfernt und als ascii char zurückgegeben.
@@ -59,7 +58,7 @@ Module modUtil
         'Wenn Wortsortierung
         If words Then
             'Teile inputstring in array auf, geteilt bei leerzeichen
-            tmpstr = strSort.Split(New Char() {" "}, StringSplitOptions.RemoveEmptyEntries)
+            tmpstr = strSort.Split({" "}, StringSplitOptions.RemoveEmptyEntries)
         Else
             'Konvertiere String zu String() für jeden Char
             For Each c As Char In strSort
@@ -84,25 +83,26 @@ Module modUtil
         Dim val(tmpstr.Length + tmppunc.Length - 1) As String
         Array.Copy(tmppunc, val, tmppunc.Length)
         Array.Copy(tmpstr, 0, val, tmppunc.Length, tmpstr.Length)
-        'output ins textfeld
-        strSort = String.Join(vbCrLf, val)
-        Form1.rtfOutput.Text = strSort
 
         'rufe sortieralgorithmen auf
         Select Case alg
             Case 0
-                'sortBubble()
+                sortBubble(val)
             Case 1
-                'sortRipple()
+                sortRipple(val)
             Case 2
                 'sortIntern()
             Case 3
-                'sortQuick()
+                sortQuick(val, 0, val.Length - 1)
             Case 4
                 'sortInsertion()
             Case Else
                 MessageBox.Show("Bitte wählen Sie einen Sortieralgorithmus!", "Achtung!", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Select
+
+        'output ins textfeld
+        strSort = String.Join(vbCrLf, val)
+        Form1.rtfOutput.Text = strSort
     End Sub
 #End Region
 #Region "strip punctuation"
