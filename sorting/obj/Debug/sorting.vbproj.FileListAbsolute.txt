@@ -28,3 +28,4 @@ C:\Users\vmadmin\Documents\GIT\sorting\sorting\obj\Debug\sorting.vbproj.Generate
 C:\Users\vmadmin\Documents\GIT\sorting\sorting\bin\Debug\sorting.exe
 C:\Users\vmadmin\Documents\GIT\sorting\sorting\bin\Debug\sorting.pdb
 C:\Users\vmadmin\Documents\GIT\sorting\sorting\bin\Debug\sorting.xml
+C:\Users\vmadmin\Documents\GIT\sorting\sorting\obj\Debug\sorting.vbprojResolveAssemblyReference.cache

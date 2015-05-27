@@ -4,6 +4,7 @@ Imports System.Globalization
 Imports System.Linq
 #End Region
 Module modUtil
+    Public _umlaut As Boolean
 #Region "swap"
     'funktion zum austauschen zweier elemente in einem StringArray
     Sub swap(ByRef strIn As String(), pos1 As Integer, pos2 As Integer)
@@ -17,7 +18,7 @@ Module modUtil
     'falls ein non-ascii char vorhanden ist, werden die zeichen entfernt und als ascii char zurückgegeben.
     Function uml(ByVal strIn As String) As String
         'sehe ob chkUmlaute gewählt ist.
-        If Form1.chkUmlaute.Checked Then
+        If _umlaut Then
             'Deklariere und Initisalisiere StringBuilder
             Dim sb As New StringBuilder
             'loope durch inputString Char für Char
@@ -58,6 +59,7 @@ Module modUtil
         If words Then
             'Teile inputstring in array auf, geteilt bei leerzeichen
             tmpstr = strSort.Split({" "}, StringSplitOptions.RemoveEmptyEntries)
+            Form1.lbl_countChr.Text = tmpstr.Length.ToString() & " Wörter"
         Else
             'Konvertiere String zu String() für jeden Char
             For Each c As Char In strSort
@@ -67,6 +69,7 @@ Module modUtil
             Next
             tmpstr = tmplist.ToArray()
             tmplist.Clear()
+            Form1.lbl_countChr.Text = tmpstr.Length.ToString() & " Zeichen"
         End If
 
         'Konvertiere String zu String() für jeden Char, sonderzeichen
@@ -83,29 +86,13 @@ Module modUtil
         Array.Copy(tmppunc, val, tmppunc.Length)
         Array.Copy(tmpstr, 0, val, tmppunc.Length, tmpstr.Length)
 
-        'rufe sortieralgorithmen auf
-        Select Case alg
-            Case 0
-                sortBubble(val)
-            Case 1
-                sortRipple(val)
-            Case 2
-                'sortIntern()
-            Case 3
-                sortQuick(val, 0, val.Length - 1)
-            Case 4
-                sortInsertion(val)
-            Case Else
-                MessageBox.Show("Bitte wählen Sie einen Sortieralgorithmus!", "Achtung!", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Select
+        'setze parameter für async BackgroundWorker
+        Dim args As ArgumentType = New ArgumentType()
+        args._algorithm = alg
+        args._arrayToSort = val
 
-        'output ins textfeld
-        If words Then
-            strSort = String.Join(" ", val)
-        Else
-            strSort = String.Join("", val)
-        End If
-        Form1.rtfOutput.Text = strSort
+        'rufe den async BackgroundWorker
+        Form1.BackgroundWorkerDoSort.RunWorkerAsync(args)
     End Sub
 #End Region
 #Region "strip punctuation"
@@ -117,14 +104,14 @@ Module modUtil
         For i As Integer = 0 To strIn.Length - 1 Step 1
             'sehe ob Char ein Zeilenabstand ist
             If strIn(i) = vbCrLf Or strIn(i) = vbNewLine Or strIn(i) = Chr(10) Or strIn(i) = Chr(13) Then
-                
+
                 'Ersetze sonderzeichen durch " " in inputstring
                 Mid(strIn, i + 1, 1) = " "
             ElseIf Char.IsPunctuation(strIn(i)) Then
                 'füge sonderzeichen zu Stringbuilder hinzu
                 sb.Append(strIn(i))
-                'Ersetze sonderzeichen durch "" in inputstring
-                Mid(strIn, i + 1, 1) = ""
+                'Ersetze sonderzeichen durch " " in inputstring
+                Mid(strIn, i + 1, 1) = " "
             End If
         Next
         Return sb.ToString

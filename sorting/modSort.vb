@@ -4,9 +4,11 @@ Imports System.Globalization
 Imports System.Console
 #End Region
 Module modSort
+    'iteration counter for quicksort
+    Public _counter As Long = 0
 #Region "Bubblesort"
     '==Bubble Sort==
-    Sub sortBubble(ByRef strInput As String())
+    Sub sortBubble(ByRef strInput As String(), worker As System.ComponentModel.BackgroundWorker)
         Dim i As Integer = strInput.Length - 1
         Dim j As Integer = i
         Do
@@ -18,12 +20,13 @@ Module modSort
                 i -= 1
             Loop While i > 0
             j -= 1
+            worker.ReportProgress(100 / strInput.Length * (strInput.Length - j))
         Loop While j > 0
     End Sub
 #End Region
 #Region "Ripplesort"
     '==Ripple Sort==
-    Function sortRipple(strInput As String())
+    Sub sortRipple(ByRef strInput As String(), worker As System.ComponentModel.BackgroundWorker)
         Dim i As Integer = strInput.Length
         i = strInput.Length - 1
         Dim j As Integer = i
@@ -39,118 +42,99 @@ Module modSort
                 i -= 1
             Loop While i > 0
             j -= 1
+            worker.ReportProgress(100 / strInput.Length * (strInput.Length - j))
         Loop While j > 0 And boolSorted = True
-        Return strInput
-    End Function
+    End Sub
 #End Region
-    '#Region "Internsort"
-    '    '==Intern Sort==
-    '    Function sortIntern(strInput As String)
-    '        Dim sb As New StringBuilder
-    '        Dim comp As Char
-    '        Dim compOld As Char = " "(0)
-    '        Dim pos As Long
-    '        Dim i As Long
-    '        For Each c As Char In strInput
-    '            comp = c
-    '            i = pos = 0
-    '            For Each cc As Char In strInput
-    '                If uml(cc) < uml(comp) And uml(cc) >= uml(compOld) Then
-    '                    comp = cc
-    '                    pos = i + 1
-    '                End If
-    '                i += 1
-    '            Next
-    '            Mid(strInput, pos, 1) = "ÿ"
-    '            compOld = comp
-    '            sb.Append(comp)
-    '        Next
-    '        Return sb.ToString()
-    '    End Function
-    '#End Region
+#Region "Internsort"
+    '==Intern Sort==
+    Sub sortIntern(ByRef strInput As String(), worker As System.ComponentModel.BackgroundWorker)
+        Dim winIndex As Long = 0
+        Dim maxValue As String = "ÿÿÿÿÿÿÿÿ"
+        Dim winValue As String
+        Dim output As New List(Of String)
+
+        For j As Long = 0 To strInput.Length - 1 Step 1
+            winValue = maxValue
+            For i As Long = 0 To strInput.Length - 1 Step 1
+                If uml(strInput(i)) < uml(winValue) Then
+                    winValue = strInput(i)
+                    winIndex = i
+                End If
+            Next
+            output.Add(winValue)
+            strInput(winIndex) = maxValue
+            worker.ReportProgress(100 / strInput.Length * output.Count)
+        Next
+        strInput = output.ToArray
+    End Sub
+#End Region
 #Region "Quicksort"
-    '    '==Quick Sort==
+    '==Quick Sort==
+
     Sub sortQuick(ByRef strIn As String(), ByVal lo As Long, ByVal hi As Long)
-        If lo < hi Then
-            Dim p As Long = quickPart(strIn, lo, hi)
-            sortQuick(strIn, lo, p - 1)
-            sortQuick(strIn, p + 1, hi)
+        Dim i As Long = lo
+        Dim j As Long = hi
+        Dim pVal As String = strIn((lo + hi) \ 2)
+        Do
+            While uml(strIn(i)) < uml(pVal)
+                i += 1
+            End While
+            While uml(pVal) < uml(strIn(j))
+                j -= 1
+            End While
+            If i <= j Then
+                swap(strIn, i, j)
+                i += 1
+                j -= 1
+            End If
+        Loop Until i > j
+        If lo < j Then
+            sortQuick(strIn, lo, j)
+        End If
+        If i < hi Then
+            sortQuick(strIn, i, hi)
         End If
     End Sub
-
-    Function quickPart(ByVal A As String(), ByVal lo As Long, ByVal hi As Long)
-        Dim pIndex As Long = A.Length \ 2
-        Dim pVal As String = A(pIndex)
-        swap(A, pIndex, hi)
-        Dim storeIndex As Long = lo
-        For i As Long = lo To hi - 1 Step 1
-            If A(i) <= pVal Then
-                swap(A, i, storeIndex)
-                storeIndex += 1
-            End If
-        Next
-        swap(A, storeIndex, hi)
-        Return storeIndex
-    End Function
-
-    'Dim A As String
-    'Function sortQuick(strIn As String, lo As Long, hi As Long)
-    '    A = strIn
-    '    quick(lo, hi)
-    '    Return A
-    'End Function
-    'Sub quick(lo As Long, hi As Long)
-    '    Dim i As Long = lo
-    '    Dim j As Long = hi
-    '    Dim x As Char = uml(A.Chars((lo + hi) \ 2))
-    '    Do
-    '        While uml(A.Chars(i)) < x
-    '            i += 1
-    '        End While
-    '        While uml(A.Chars(j)) > x
-    '            j -= 1
-    '        End While
-    '        If i <= j Then
-    '            A = swap(A, i, j)
-    '            i += 1
-    '            j -= 1
-    '        End If
-    '        Console.WriteLine(A)
-    '    Loop Until i > j
-    '    quick(lo, j)
-    '    quick(i, hi)
-    'End Sub
-    'Function srtQuick(A As String, lo As Long, hi As Long)
-    '    If lo < hi Then
-    '        Dim pivotIndex As Long = Len(A) \ 2
-    '        Dim pivotValue As Char = uml(A.Chars(pivotIndex))
-    '        A = swap(A, pivotIndex - 1, hi - 1)
-    '        Dim storeIndex As Long = lo
-    '        For i As Long = lo To hi - 1 Step 1
-    '            If uml(A.Chars(i)) < pivotValue Then
-    '                A = swap(A, i - 1, storeIndex - 1)
-    '                storeIndex += 1
-    '            End If
-    '        Next
-    '        A = swap(A, storeIndex - 1, hi - 1)
-    '        Dim p As Long = storeIndex
-    '        sortQuick(A, lo, p - 1)
-    '        sortQuick(A, p + 1, hi)
-    '    End If
-    '    Return A
-    'End Function
 #End Region
 #Region "Insertionsort"
     '==Insertion Sort==
-    Function sortInsertion(strInput As String())
-        For i As Long = 0 To strInput.Length - 1 Step 1
+    Sub sortInsertion(ByRef strIn As String(), worker As System.ComponentModel.BackgroundWorker)
+        For i As Long = 1 To strIn.Length - 1
             Dim j As Long = i
-            While j >= 2 And uml(strInput(j - 1)) > uml(strInput(j))
-                swap(strInput, j, j - 1)
+            While j > 0 And uml(strIn(j - 1)) > uml(strIn(j))
+                swap(strIn, j, j - 1)
                 j -= 1
             End While
+            worker.ReportProgress(100 / strIn.Length * j)
         Next
-        Return strInput
-    End Function
+    End Sub
+    'Sub sortInsertion(ByRef strInput As String(), worker As System.ComponentModel.BackgroundWorker)
+    '    For i As Long = 0 To strInput.Length - 1 Step 1
+    '        Dim j As Long = i
+    '        While j >= 2 And uml(strInput(j - 1)) > uml(strInput(j))
+    '            swap(strInput, j, j - 1)
+    '            j -= 1
+    '        End While
+    '        worker.ReportProgress(100 / strInput.Length * i)
+    '    Next
+    'End Sub
+#End Region
+#Region "Selectionsort"
+    Sub sortSelection(ByRef strIn As String(), worker As System.ComponentModel.BackgroundWorker)
+        Dim min As Integer = 0
+        For j As Integer = 0 To strIn.Length - 2 Step 1
+            min = j
+            For i As Integer = j + 1 To strIn.Length - 1
+                If uml(strIn(i)) < uml(strIn(min)) Then
+                    min = i
+                End If
+            Next
+            If Not min = j Then
+                swap(strIn, j, min)
+            End If
+            worker.ReportProgress(100 / strIn.Length * j)
+        Next
+    End Sub
 #End Region
 End Module
