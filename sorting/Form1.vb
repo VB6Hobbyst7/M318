@@ -336,3 +336,5 @@ Public Class ArgumentType
     Public _words As Boolean
 End Class
 #End Region
+'this application was brought to you by a lot of caffeine and no sleep.
+' ¯\_(ツ)_/¯c[_]
