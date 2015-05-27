@@ -59,6 +59,9 @@ Partial Class Form1
         Me.mnu_options_color_txt = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnu_info = New System.Windows.Forms.ToolStripMenuItem()
         Me.BackgroundWorkerPrepare = New System.ComponentModel.BackgroundWorker()
+        Me.ZumProgrammToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ZumAutorToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.RechteToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnu_strip.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -298,17 +301,18 @@ Partial Class Form1
         'mnu_options_color_form
         '
         Me.mnu_options_color_form.Name = "mnu_options_color_form"
-        Me.mnu_options_color_form.Size = New System.Drawing.Size(122, 22)
+        Me.mnu_options_color_form.Size = New System.Drawing.Size(152, 22)
         Me.mnu_options_color_form.Text = "Formular"
         '
         'mnu_options_color_txt
         '
         Me.mnu_options_color_txt.Name = "mnu_options_color_txt"
-        Me.mnu_options_color_txt.Size = New System.Drawing.Size(122, 22)
+        Me.mnu_options_color_txt.Size = New System.Drawing.Size(152, 22)
         Me.mnu_options_color_txt.Text = "Textbox"
         '
         'mnu_info
         '
+        Me.mnu_info.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ZumProgrammToolStripMenuItem, Me.ZumAutorToolStripMenuItem, Me.RechteToolStripMenuItem})
         Me.mnu_info.Name = "mnu_info"
         Me.mnu_info.Size = New System.Drawing.Size(45, 20)
         Me.mnu_info.Text = "Infos"
@@ -317,6 +321,24 @@ Partial Class Form1
         '
         Me.BackgroundWorkerPrepare.WorkerReportsProgress = True
         Me.BackgroundWorkerPrepare.WorkerSupportsCancellation = True
+        '
+        'ZumProgrammToolStripMenuItem
+        '
+        Me.ZumProgrammToolStripMenuItem.Name = "ZumProgrammToolStripMenuItem"
+        Me.ZumProgrammToolStripMenuItem.Size = New System.Drawing.Size(159, 22)
+        Me.ZumProgrammToolStripMenuItem.Text = "Zum Programm"
+        '
+        'ZumAutorToolStripMenuItem
+        '
+        Me.ZumAutorToolStripMenuItem.Name = "ZumAutorToolStripMenuItem"
+        Me.ZumAutorToolStripMenuItem.Size = New System.Drawing.Size(159, 22)
+        Me.ZumAutorToolStripMenuItem.Text = "Zum Autor"
+        '
+        'RechteToolStripMenuItem
+        '
+        Me.RechteToolStripMenuItem.Name = "RechteToolStripMenuItem"
+        Me.RechteToolStripMenuItem.Size = New System.Drawing.Size(159, 22)
+        Me.RechteToolStripMenuItem.Text = "Rechte"
         '
         'Form1
         '
@@ -339,6 +361,7 @@ Partial Class Form1
         Me.Controls.Add(Me.btnSort)
         Me.Cursor = System.Windows.Forms.Cursors.Arrow
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.KeyPreview = True
         Me.MainMenuStrip = Me.mnu_strip
         Me.MaximizeBox = False
         Me.MaximumSize = New System.Drawing.Size(1015, 664)
@@ -387,5 +410,8 @@ Partial Class Form1
     Friend WithEvents mnu_options_color_form As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents mnu_options_color_txt As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents BackgroundWorkerPrepare As System.ComponentModel.BackgroundWorker
+    Friend WithEvents ZumProgrammToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ZumAutorToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents RechteToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 
 End Class

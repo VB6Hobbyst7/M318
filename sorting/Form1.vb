@@ -4,6 +4,7 @@ Public Class Form1
     'define applicationwide timer
     Public _timer As Stopwatch = New Stopwatch
 
+#Region "Buttons auf Form1"
     Private Sub btnExit_Click(sender As Object, e As EventArgs) Handles btnExit.Click
         Me.Close()
     End Sub
@@ -32,6 +33,20 @@ Public Class Form1
         rtfInput.Text = ""
         rtfOutput.Text = ""
     End Sub
+
+    Private Sub btn_cancelSort_Click(sender As Object, e As EventArgs) Handles btn_cancelSort.Click
+        If BackgroundWorkerDoSort.IsBusy Then
+            BackgroundWorkerDoSort.CancelAsync()
+            btn_cancelSort.Enabled = False
+            btnSort.Enabled = True
+        End If
+        If BackgroundWorkerPrepare.IsBusy Then
+            BackgroundWorkerPrepare.CancelAsync()
+            btn_cancelSort.Enabled = False
+            btnSort.Enabled = True
+        End If
+    End Sub
+#End Region 
 #Region "Backgroundworker for prep"
     Private Sub BackgroundWorkerPrepare_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BackgroundWorkerPrepare.DoWork
         Dim args As ArgumentType = e.Argument
@@ -46,6 +61,7 @@ Public Class Form1
             'strippe sonderzeichen vom inputstring und speichere diese in <strPunct> ab.
             Dim strPunct As String = stripPunctuation(strSort, BackgroundWorkerPrepare, e)
 
+            'programmsnippet zum abbrechen und terminieren des BackgroundWorkers.
             If BackgroundWorkerPrepare.CancellationPending Then
                 e.Cancel = True
                 Exit Sub
@@ -63,6 +79,7 @@ Public Class Form1
                     If Not c = " " Then
                         tmplist.Add(c.ToString())
                     End If
+                    'gibt den geschätzen fortschritt in % zurück. dazu wird auch die aktuelle aufgabe zurückgegeben
                     BackgroundWorkerPrepare.ReportProgress(100 / strSort.Length * tmpcount, "Chararray zu Stringarray konvertieren: ")
                     If BackgroundWorkerPrepare.CancellationPending Then
                         e.Cancel = True
@@ -107,16 +124,20 @@ Public Class Form1
         End Try
     End Sub
 
+    'sub zum updaten des UI für Progressinformationen des Backgroundworkers.
     Private Sub BackgroundWorkerPrepare_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles BackgroundWorkerPrepare.ProgressChanged
         lblExecTime.Text = "Preparing input for sorting..."
         lbl_donePercent.Text = e.UserState.ToString() & e.ProgressPercentage.ToString() & "%"
         prg_done.Value = e.ProgressPercentage
     End Sub
 
+    'sub welche ausgeführt wird, nachdem der BackgroundWorker terminiert
     Private Sub BackgroundWorkerPrepare_RunWorkerCompleted(sender As Object, e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles BackgroundWorkerPrepare.RunWorkerCompleted
         lblExecTime.Text = "Execution Time: 0:0:0,0"
         prg_done.Value = 100
+        'Prüfe ob abgebrochen wurde, oder ob der BackgroundWorker komplett durch ist.
         If Not e.Cancelled Then
+            'rufe caller auf (modUtil.vb)
             callSort(e.Result, lstAlgo.SelectedIndex, chk_words.Checked)
         End If
     End Sub
@@ -189,20 +210,33 @@ Public Class Form1
     End Sub
 #End Region
 #End Region
-
-    Private Sub btn_cancelSort_Click(sender As Object, e As EventArgs) Handles btn_cancelSort.Click
-        If BackgroundWorkerDoSort.IsBusy Then
-            BackgroundWorkerDoSort.CancelAsync()
-            btn_cancelSort.Enabled = False
-            btnSort.Enabled = True
-        End If
-        If BackgroundWorkerPrepare.IsBusy Then
-            BackgroundWorkerPrepare.CancelAsync()
-            btn_cancelSort.Enabled = False
-            btnSort.Enabled = True
+#Region "Menu"
+    'Sub to capture shortcuts
+    Private Sub catchShortCut(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles MyBase.KeyDown
+        If e.Control Then
+            Select Case e.KeyCode.ToString()
+                Case "N"
+                    mnu_datei_neu_Click(sender, e)
+                Case "O"
+                    mnu_datei_open_Click(sender, e)
+                Case "Q"
+                    mnu_datei_close_Click(sender, e)
+                Case "S"
+                    mnu_datei_save_Click(sender, e)
+                Case "X"
+                    'do nothing, is handled by the operating system already, probably better
+                Case "C"
+                    'do nothing, is handled by the operating system already, probably better
+                Case "V"
+                    'do Nothing, is handled by the operating system already, probably better
+                Case "R"
+                    mnu_edit_sort_Click(sender, e)
+                Case "U"
+                    mnu_options_uml_Click(sender, e)
+            End Select
         End If
     End Sub
-#Region "Menu"
+#Region "Datei"
     Private Sub mnu_datei_close_Click(sender As Object, e As EventArgs) Handles mnu_datei_close.Click
         Me.Close()
     End Sub
@@ -213,8 +247,84 @@ Public Class Form1
     End Sub
 
     Private Sub mnu_datei_open_Click(sender As Object, e As EventArgs) Handles mnu_datei_open.Click
-
+        Dim dlg_open As OpenFileDialog = New OpenFileDialog
+        dlg_open.Filter = "Text files (*.txt)|*.txt"
+        dlg_open.FilterIndex = 1
+        dlg_open.Multiselect = False
+        If dlg_open.ShowDialog = DialogResult.OK Then
+            rtfInput.Text = File.ReadAllText(dlg_open.FileName)
+        End If
     End Sub
+
+    Private Sub mnu_datei_save_Click(sender As Object, e As EventArgs) Handles mnu_datei_save.Click
+        Dim dlg_save As SaveFileDialog = New SaveFileDialog
+        dlg_save.Filter = "Text files (*.txt)|*.txt"
+        dlg_save.FilterIndex = 1
+        dlg_save.SupportMultiDottedExtensions = False
+        If dlg_save.ShowDialog = Windows.Forms.DialogResult.OK Then
+            File.WriteAllText(dlg_save.FileName, rtfOutput.Text)
+        End If
+    End Sub
+#End Region
+#Region "Bearbeiten"
+    Private Sub mnu_edit_cut_Click(sender As Object, e As EventArgs) Handles mnu_edit_cut.Click
+        Clipboard.SetText(rtfInput.SelectedText)
+        rtfInput.SelectedText.Remove(0)
+    End Sub
+
+    Private Sub mnu_edit_copy_Click(sender As Object, e As EventArgs) Handles mnu_edit_copy.Click
+        Clipboard.SetText(rtfInput.SelectedText)
+    End Sub
+
+    Private Sub mnu_edit_paste_Click(sender As Object, e As EventArgs) Handles mnu_edit_paste.Click
+        rtfInput.SelectedText = Clipboard.GetText
+    End Sub
+
+    Private Sub mnu_edit_sort_Click(sender As Object, e As EventArgs) Handles mnu_edit_sort.Click
+        btnSort_Click(sender, e)
+    End Sub
+#End Region
+#Region "Optionen"
+    Private Sub mnu_options_uml_Click(sender As Object, e As EventArgs) Handles mnu_options_uml.Click
+        If chkUmlaute.Checked Then
+            chkUmlaute.Checked = False
+        ElseIf Not chkUmlaute.Checked Then
+            chkUmlaute.Checked = True
+        End If
+    End Sub
+
+    Private Sub mnu_options_color_form_Click(sender As Object, e As EventArgs) Handles mnu_options_color_form.Click
+        Dim dlg_color As ColorDialog = New ColorDialog()
+        dlg_color.AnyColor = True
+        dlg_color.AllowFullOpen = True
+        If dlg_color.ShowDialog = Windows.Forms.DialogResult.OK Then
+            Me.BackColor = dlg_color.Color
+        End If
+    End Sub
+
+    Private Sub mnu_options_color_txt_Click(sender As Object, e As EventArgs) Handles mnu_options_color_txt.Click
+        Dim dlg_color As ColorDialog = New ColorDialog()
+        dlg_color.AnyColor = True
+        dlg_color.AllowFullOpen = True
+        If dlg_color.ShowDialog = Windows.Forms.DialogResult.OK Then
+            rtfInput.BackColor = dlg_color.Color
+            rtfOutput.BackColor = dlg_color.Color
+        End If
+    End Sub
+#End Region
+#Region "Infos"
+    Private Sub ZumProgrammToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ZumProgrammToolStripMenuItem.Click
+        MessageBox.Show("Entwickelt durch Marius Schär" & vbCrLf & "2015 im Rahmen des IET-Moduls 318" & vbCrLf & "Das Programm kann strings mit verschiedenen Sortieralgorithmen und anderen Parametern sortieren.", "Informationen zum Program", MessageBoxButtons.OK, MessageBoxIcon.Information)
+    End Sub
+
+    Private Sub ZumAutorToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ZumAutorToolStripMenuItem.Click
+        MessageBox.Show("Marius Schär, geb. 1997" & vbCrLf & "Informatiklehrling, Jahrgang 2013" & vbCrLf & "Lehrfirma: login Berufsbildung / SBB" & vbCrLf & "github: http://github.com/schaerm", "Informationen zum Autor", MessageBoxButtons.OK, MessageBoxIcon.Information)
+    End Sub
+
+    Private Sub RechteToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RechteToolStripMenuItem.Click
+        MessageBox.Show("Sämtliche Haftung ausgeschlossen" & vbCrLf & "Programmcode unter GPLv2 Lizenz auf github verfügbar:" & vbCrLf & "http://github.com/schaerm/sorting", "Rechtliches", MessageBoxButtons.OK, MessageBoxIcon.Information)
+    End Sub
+#End Region
 #End Region
 End Class
 #Region "Custom Class for Async args"
