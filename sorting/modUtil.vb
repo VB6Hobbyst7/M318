@@ -48,56 +48,19 @@ Module modUtil
 #End Region
 #Region "caller"
     'präpariert inputstring zum sortieren, und ruft den entsprechenden sortieralgorithmus auf.
-    Sub callSort(ByVal strSort As String, ByVal alg As Integer, ByVal words As Boolean)
-        'deklariere temp variabeln
-        Dim tmpstr, tmppunc As String()
-        Dim tmplist As New List(Of String)
-        'strippe sonderzeichen vom inputstring und speichere diese in <strPunct> ab.
-        Dim strPunct As String = stripPunctuation(strSort)
-
-        'Wenn Wortsortierung
-        If words Then
-            'Teile inputstring in array auf, geteilt bei leerzeichen
-            tmpstr = strSort.Split({" "}, StringSplitOptions.RemoveEmptyEntries)
-            Form1.lbl_countChr.Text = tmpstr.Length.ToString() & " Wörter"
-        Else
-            'Konvertiere String zu String() für jeden Char
-            For Each c As Char In strSort
-                If Not c = " " Then
-                    tmplist.Add(c.ToString())
-                End If
-            Next
-            tmpstr = tmplist.ToArray()
-            tmplist.Clear()
-            Form1.lbl_countChr.Text = tmpstr.Length.ToString() & " Zeichen"
-        End If
-
-        'Konvertiere String zu String() für jeden Char, sonderzeichen
-        For Each c As Char In strPunct
-            If Not c = " " Then
-                tmplist.Add(c.ToString())
-            End If
-        Next
-        tmppunc = tmplist.ToArray()
-        tmplist.Clear()
-
-        'füge Sonderzeichen zum beginn der "normalen" Strings hinzu
-        Dim val(tmpstr.Length + tmppunc.Length - 1) As String
-        Array.Copy(tmppunc, val, tmppunc.Length)
-        Array.Copy(tmpstr, 0, val, tmppunc.Length, tmpstr.Length)
+    Sub callSort(ByVal strInput As String(), ByVal alg As Integer, ByVal words As Boolean)
 
         'setze parameter für async BackgroundWorker
         Dim args As ArgumentType = New ArgumentType()
         args._algorithm = alg
-        args._arrayToSort = val
-
+        args._arrayToSort = strInput
         'rufe den async BackgroundWorker
         Form1.BackgroundWorkerDoSort.RunWorkerAsync(args)
     End Sub
 #End Region
 #Region "strip punctuation"
     'entfernt sonderzeichen durch verwendung von <IsPunctuation> und gibt diese als string zurück.
-    Function stripPunctuation(ByRef strIn As String) As String
+    Function stripPunctuation(ByRef strIn As String, ByRef worker As System.ComponentModel.BackgroundWorker, e As System.ComponentModel.DoWorkEventArgs) As String
         'Deklariere & initialisiere StringBuilder
         Dim sb As New StringBuilder
         'loop durch inputstring
@@ -112,6 +75,11 @@ Module modUtil
                 sb.Append(strIn(i))
                 'Ersetze sonderzeichen durch " " in inputstring
                 Mid(strIn, i + 1, 1) = " "
+            End If
+            worker.ReportProgress(100 / strIn.Length * i, "Sonderzeichen strippen: ")
+            If worker.CancellationPending Then
+                e.Cancel = True
+                Exit For
             End If
         Next
         Return sb.ToString

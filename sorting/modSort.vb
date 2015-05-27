@@ -8,7 +8,7 @@ Module modSort
     Public _counter As Long = 0
 #Region "Bubblesort"
     '==Bubble Sort==
-    Sub sortBubble(ByRef strInput As String(), worker As System.ComponentModel.BackgroundWorker)
+    Sub sortBubble(ByRef strInput As String(), worker As System.ComponentModel.BackgroundWorker, ByRef e As System.ComponentModel.DoWorkEventArgs)
         Dim i As Integer = strInput.Length - 1
         Dim j As Integer = i
         Do
@@ -21,12 +21,16 @@ Module modSort
             Loop While i > 0
             j -= 1
             worker.ReportProgress(100 / strInput.Length * (strInput.Length - j))
+            If worker.CancellationPending Then
+                e.Cancel = True
+                Exit Do
+            End If
         Loop While j > 0
     End Sub
 #End Region
 #Region "Ripplesort"
     '==Ripple Sort==
-    Sub sortRipple(ByRef strInput As String(), worker As System.ComponentModel.BackgroundWorker)
+    Sub sortRipple(ByRef strInput As String(), worker As System.ComponentModel.BackgroundWorker, ByRef e As System.ComponentModel.DoWorkEventArgs)
         Dim i As Integer = strInput.Length
         i = strInput.Length - 1
         Dim j As Integer = i
@@ -43,12 +47,16 @@ Module modSort
             Loop While i > 0
             j -= 1
             worker.ReportProgress(100 / strInput.Length * (strInput.Length - j))
+            If worker.CancellationPending Then
+                e.Cancel = True
+                Exit Do
+            End If
         Loop While j > 0 And boolSorted = True
     End Sub
 #End Region
 #Region "Internsort"
     '==Intern Sort==
-    Sub sortIntern(ByRef strInput As String(), worker As System.ComponentModel.BackgroundWorker)
+    Sub sortIntern(ByRef strInput As String(), worker As System.ComponentModel.BackgroundWorker, ByRef e As System.ComponentModel.DoWorkEventArgs)
         Dim winIndex As Long = 0
         Dim maxValue As String = "ÿÿÿÿÿÿÿÿ"
         Dim winValue As String
@@ -65,6 +73,10 @@ Module modSort
             output.Add(winValue)
             strInput(winIndex) = maxValue
             worker.ReportProgress(100 / strInput.Length * output.Count)
+            If worker.CancellationPending Then
+                e.Cancel = True
+                Exit For
+            End If
         Next
         strInput = output.ToArray
     End Sub
@@ -72,7 +84,7 @@ Module modSort
 #Region "Quicksort"
     '==Quick Sort==
 
-    Sub sortQuick(ByRef strIn As String(), ByVal lo As Long, ByVal hi As Long)
+    Sub sortQuick(ByRef strIn As String(), ByVal lo As Long, ByVal hi As Long, worker As System.ComponentModel.BackgroundWorker, ByRef e As System.ComponentModel.DoWorkEventArgs)
         Dim i As Long = lo
         Dim j As Long = hi
         Dim pVal As String = strIn((lo + hi) \ 2)
@@ -89,39 +101,37 @@ Module modSort
                 j -= 1
             End If
         Loop Until i > j
+        If worker.CancellationPending Then
+            e.Cancel = True
+            Exit Sub
+        End If
         If lo < j Then
-            sortQuick(strIn, lo, j)
+            sortQuick(strIn, lo, j, worker, e)
         End If
         If i < hi Then
-            sortQuick(strIn, i, hi)
+            sortQuick(strIn, i, hi, worker, e)
         End If
     End Sub
 #End Region
 #Region "Insertionsort"
     '==Insertion Sort==
-    Sub sortInsertion(ByRef strIn As String(), worker As System.ComponentModel.BackgroundWorker)
+    Sub sortInsertion(ByRef strIn As String(), worker As System.ComponentModel.BackgroundWorker, ByRef e As System.ComponentModel.DoWorkEventArgs)
         For i As Long = 1 To strIn.Length - 1
             Dim j As Long = i
-            While j > 0 And uml(strIn(j - 1)) > uml(strIn(j))
+            While j > 1 And uml(strIn(j - 1)) > uml(strIn(j))
                 swap(strIn, j, j - 1)
                 j -= 1
             End While
-            worker.ReportProgress(100 / strIn.Length * j)
+            worker.ReportProgress(100 / strIn.Length * i)
+            If worker.CancellationPending Then
+                e.Cancel = True
+                Exit For
+            End If
         Next
     End Sub
-    'Sub sortInsertion(ByRef strInput As String(), worker As System.ComponentModel.BackgroundWorker)
-    '    For i As Long = 0 To strInput.Length - 1 Step 1
-    '        Dim j As Long = i
-    '        While j >= 2 And uml(strInput(j - 1)) > uml(strInput(j))
-    '            swap(strInput, j, j - 1)
-    '            j -= 1
-    '        End While
-    '        worker.ReportProgress(100 / strInput.Length * i)
-    '    Next
-    'End Sub
 #End Region
 #Region "Selectionsort"
-    Sub sortSelection(ByRef strIn As String(), worker As System.ComponentModel.BackgroundWorker)
+    Sub sortSelection(ByRef strIn As String(), worker As System.ComponentModel.BackgroundWorker, ByRef e As System.ComponentModel.DoWorkEventArgs)
         Dim min As Integer = 0
         For j As Integer = 0 To strIn.Length - 2 Step 1
             min = j
@@ -134,6 +144,10 @@ Module modSort
                 swap(strIn, j, min)
             End If
             worker.ReportProgress(100 / strIn.Length * j)
+            If worker.CancellationPending Then
+                e.Cancel = True
+                Exit For
+            End If
         Next
     End Sub
 #End Region

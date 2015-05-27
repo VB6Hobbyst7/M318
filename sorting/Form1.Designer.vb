@@ -58,6 +58,7 @@ Partial Class Form1
         Me.mnu_options_color_form = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnu_options_color_txt = New System.Windows.Forms.ToolStripMenuItem()
         Me.mnu_info = New System.Windows.Forms.ToolStripMenuItem()
+        Me.BackgroundWorkerPrepare = New System.ComponentModel.BackgroundWorker()
         Me.mnu_strip.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -159,13 +160,14 @@ Partial Class Form1
         '
         'prg_done
         '
-        Me.prg_done.Location = New System.Drawing.Point(436, 608)
+        Me.prg_done.Location = New System.Drawing.Point(597, 608)
         Me.prg_done.Name = "prg_done"
-        Me.prg_done.Size = New System.Drawing.Size(415, 13)
+        Me.prg_done.Size = New System.Drawing.Size(254, 13)
         Me.prg_done.TabIndex = 12
         '
         'btn_cancelSort
         '
+        Me.btn_cancelSort.Enabled = False
         Me.btn_cancelSort.Location = New System.Drawing.Point(857, 482)
         Me.btn_cancelSort.Name = "btn_cancelSort"
         Me.btn_cancelSort.Size = New System.Drawing.Size(109, 23)
@@ -311,6 +313,11 @@ Partial Class Form1
         Me.mnu_info.Size = New System.Drawing.Size(45, 20)
         Me.mnu_info.Text = "Infos"
         '
+        'BackgroundWorkerPrepare
+        '
+        Me.BackgroundWorkerPrepare.WorkerReportsProgress = True
+        Me.BackgroundWorkerPrepare.WorkerSupportsCancellation = True
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -337,7 +344,7 @@ Partial Class Form1
         Me.MaximumSize = New System.Drawing.Size(1015, 664)
         Me.MinimumSize = New System.Drawing.Size(995, 664)
         Me.Name = "Form1"
-        Me.Text = "Form1"
+        Me.Text = "Sortieren_M_Schär"
         Me.mnu_strip.ResumeLayout(False)
         Me.mnu_strip.PerformLayout()
         Me.ResumeLayout(False)
@@ -379,5 +386,6 @@ Partial Class Form1
     Friend WithEvents mnu_options_color As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents mnu_options_color_form As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents mnu_options_color_txt As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents BackgroundWorkerPrepare As System.ComponentModel.BackgroundWorker
 
 End Class
