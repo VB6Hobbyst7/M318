@@ -66,7 +66,7 @@ Module modUtil
         'loop durch inputstring
         For i As Integer = 0 To strIn.Length - 1 Step 1
             'sehe ob Char ein Zeilenabstand ist
-            If strIn(i) = vbCrLf Or strIn(i) = vbNewLine Or strIn(i) = Chr(10) Or strIn(i) = Chr(13) Then
+            If strIn(i) = vbCrLf Or strIn(i) = vbNewLine Or strIn(i) = Chr(10) Or strIn(i) = Chr(13) Or strIn(i) = vbTab Then
 
                 'Ersetze sonderzeichen durch " " in inputstring
                 Mid(strIn, i + 1, 1) = " "
